@@ -20,32 +20,8 @@ public class MainWindow extends JFrame {
     {
         this.provider = new ConnectDBProvider();
     }
-
-    private JButton sozProdCreateButton;
-    private JLabel opisanieProductaLabel;
     private ConnectDBProvider provider;
 
-    public JLabel getOpisanieProductaLabel() {
-        return opisanieProductaLabel;
-    }
-
-
-    public void setCities(ArrayList<City> cities) {
-        this.cities = cities;
-    }
-
-    private ArrayList<City> cities;
-
-
-    private String putBazaSave;
-
-    public String getPutBazaSave() {
-        return putBazaSave;
-    }
-
-    public void setPutBazaSave(String putBazaSave) {
-        this.putBazaSave = putBazaSave;
-    }
 
     public MainWindow() throws Exception {
 
