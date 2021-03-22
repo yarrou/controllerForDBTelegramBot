@@ -20,6 +20,7 @@ public class MainWindow extends JFrame {
     {
         this.provider = new ConnectDBProvider();
     }
+
     private ConnectDBProvider provider;
 
 
@@ -36,21 +37,17 @@ public class MainWindow extends JFrame {
         JPanel zaprosPanel = new JPanel();//вкладка ввода запроса
         JLabel iskomiyCityLabel = new JLabel("город");
         JTextField vvodTeksta = new JTextField(14);//поле ввода запроса
-        //ImageIcon poiskImage=new ImageIcon(getClass().getClassLoader().getResource("grafics/gui/poisk.png")) ;
         JButton poiskButton = new JButton("поиск");//,poiskImage);//кнопка поиска
         zaprosPanel.add(iskomiyCityLabel);
         zaprosPanel.add(vvodTeksta);
         zaprosPanel.add(poiskButton);
         findCityPanel.add(zaprosPanel, BorderLayout.NORTH);
-        JLabel iconProductLabel = new JLabel();//вывод изображения продукта
-        iconProductLabel.setPreferredSize(new Dimension(70, 70));//размер изображения продукта
-        iconProductLabel.setBorder(BorderFactory.createLineBorder(Color.black));
         JLabel opisanieProductaLabel = new JLabel();//вывод результата поиска
         opisanieProductaLabel.setPreferredSize(new Dimension(355, 70));
         opisanieProductaLabel.setBorder(BorderFactory.createLineBorder(Color.black));
         JPanel vivodPanel = new JPanel();
         vivodPanel.setLayout(new FlowLayout());
-        vivodPanel.add(iconProductLabel);
+        //vivodPanel.add(iconProductLabel);
         vivodPanel.add(opisanieProductaLabel);
         vivodPanel.setBorder(new TitledBorder("вывод результата"));
         vivodPanel.setPreferredSize(new Dimension(450, 200));
@@ -60,14 +57,16 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 GetRequestHandler getRequestHandler = new GetRequestHandler(provider);
+                StringBuilder message = new StringBuilder();
                 try {
                     String cityName = vvodTeksta.getText();
                     Response response = getRequestHandler.sendRequest(cityName);
-                    opisanieProductaLabel.setText(response.getMessage());
-                    iconProductLabel.setText(response.getStatus() + "");
+                    message.append(response.getStatus()).append(" ").append(response.getMessage());
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    message.append(e.getClass().getName()).append(" ").append(e.getMessage());
                 }
+                opisanieProductaLabel.setText(message.toString());
             }
         });
 
@@ -160,6 +159,7 @@ public class MainWindow extends JFrame {
                     message = response.getMessage();
                 } catch (IOException e) {
                     message = e.getClass().getName();
+                    code = e.getMessage();
                     e.printStackTrace();
                 }
                 changeResponseLabel.setText(code + " " + message);
@@ -201,14 +201,18 @@ public class MainWindow extends JFrame {
 
             public void actionPerformed(ActionEvent event) {
                 DeleteRequestHandler deleteRequestHandler = new DeleteRequestHandler(provider);
+                StringBuilder message = new StringBuilder();
                 try {
                     String cityName = cityDeleteNameTextField.getText();
                     Response response = deleteRequestHandler.sendRequest(cityName);
-                    cityDeleteOutputLabel.setText(response.getStatus() + " " + response.getMessage());
-                    resultDeleteCityLabel.setText("");
+                    message.append(response.getStatus()).append(" ").append(response.getMessage());
+
                 } catch (IOException e) {
+                    message.append(e.getClass().getName()).append(" ").append(e.getMessage());
                     e.printStackTrace();
                 }
+                cityDeleteOutputLabel.setText(message.toString());
+                resultDeleteCityLabel.setText("");
             }
         });
 
